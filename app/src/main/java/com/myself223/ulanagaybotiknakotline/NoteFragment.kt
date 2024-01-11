@@ -8,15 +8,15 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.myself223.ulanagaybotiknakotline.databinding.FragmentNoteBinding
 import java.io.Serializable
 
 
 class NoteFragment : Fragment(), NoteAdapter.Clickable {
-    private var recyclerView: RecyclerView? = null
+    private lateinit var binding: FragmentNoteBinding
     private var adapter: NoteAdapter? = null
-    private var btnAdd: Button? = null
-    private var btnSort: Button? = null
-    private var navHostFragment: NavHostFragment? = null
+    private var NavHostFragment: NavHostFragment? = null
 
 
 
@@ -25,41 +25,35 @@ class NoteFragment : Fragment(), NoteAdapter.Clickable {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_note, container, false)
+        val binding1 = FragmentNoteBinding.inflate(inflater, container, false)
+        binding = binding1
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        btnAdd = view.findViewById(R.id.btn_add)
-        btnSort = view.findViewById(R.id.btn_sort)
-        //Инициализация RecyclerView
-        recyclerView = view.findViewById(R.id.rv_notes)
         adapter = NoteAdapter(this)
-        recyclerView?.adapter = adapter
+        binding.rvNotes?.adapter = adapter
         adapter!!.addNote(MainActivity.getList())
-        navHostFragment =
+        NavHostFragment =
             requireActivity().supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as
                     NavHostFragment
-        val navController = navHostFragment!!.navController
+        val navController = NavHostFragment!!.navController
 
-        btnAdd?.setOnClickListener {
+        binding.btnAdd?.setOnClickListener {
             navController.navigate(R.id.addNoteFragment)
         }
-        btnSort?.setOnClickListener{adapter!!.sortNotes() }
-        /*   requireActivity().getSupportFragmentManager().setFragmentResultListener("new_note", this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                Note note = (Note) result.getSerializable("note");
-                adapter.addNote(note);
-            }
-        });*/requireActivity().supportFragmentManager.setFragmentResultListener(
+        binding.btnSort?.setOnClickListener{adapter!!.sortNotes() }
+    requireActivity().supportFragmentManager.setFragmentResultListener(
             "change_note", this
         ) { _, result ->
-            val note: Notes? = result.getSerializable("edit_note") as Notes?
-            note?.let { adapter!!.changeNote(it, result.getInt("position")) }
+        val note: Notes? = result.getSerializable("edit_note") as Notes?
+        note?.let { adapter!!.changeNote(it, result.getInt("position")) }
 
-        }
+
+    }
+
     }
 
     override fun edit(position: Int) {
@@ -71,11 +65,13 @@ class NoteFragment : Fragment(), NoteAdapter.Clickable {
         bundle.putString("changeDate", note.date)
         bundle.putInt("position", position)
 
-        val navController = navHostFragment?.navController
+        val navController = NavHostFragment?.navController
         navController?.navigate(R.id.addNoteFragment, bundle)
     }
 
-
+    override fun delete(position: Int) {
+        TODO("Not yet implemented")
+    }
 
 
 }

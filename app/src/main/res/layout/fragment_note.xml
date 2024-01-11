@@ -58,6 +58,8 @@
         android:insetBottom="0dp"
         app:iconTint="@color/black"
         app:icon="@drawable/pilus"
+        app:iconSize="36dp"
+        android:padding="17dp"
         android:backgroundTint="#FFE5BE"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

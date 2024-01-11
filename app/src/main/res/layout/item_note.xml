@@ -29,7 +29,7 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/item_card"
-        android:text="Title"
+        android:text="@string/Title"
         app:layout_constraintTop_toTopOf="@id/item_card"
         android:layout_marginStart="14dp"
         android:layout_marginTop="8dp"

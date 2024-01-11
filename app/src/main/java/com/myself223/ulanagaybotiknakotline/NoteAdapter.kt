@@ -1,16 +1,22 @@
 package com.myself223.ulanagaybotiknakotline
 
+import android.content.Intent
+import android.provider.MediaStore
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.myself223.ulanagaybotiknakotline.databinding.ItemNoteBinding
 
 
-class NoteAdapter(private val  listener: Clickable) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
+class NoteAdapter(
+    private val  listener: Clickable)
+    : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
+
+
+
+
+
     private var list = arrayListOf<Notes>()
     private var inflater: LayoutInflater? = null
 
@@ -33,7 +39,10 @@ class NoteAdapter(private val  listener: Clickable) : RecyclerView.Adapter<NoteA
         notifyDataSetChanged()
     }
 
-    fun remoteNotes(){
+    fun removeNotes(position:Int){
+        list.remove(list[position])
+
+
 
     }
 
@@ -42,6 +51,7 @@ class NoteAdapter(private val  listener: Clickable) : RecyclerView.Adapter<NoteA
         inflater = LayoutInflater.from(parent.context)
         val binding = ItemNoteBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return NoteViewHolder(binding)
+
     }
 
     override fun getItemCount(): Int {
@@ -49,35 +59,46 @@ class NoteAdapter(private val  listener: Clickable) : RecyclerView.Adapter<NoteA
     }
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
+
+
         holder.onBind(list[position])
-        holder.btnEdit?.setOnClickListener{
+        holder.binding.itemBtnEdit.setOnClickListener{
             listener.edit(holder.adapterPosition)
         }
+        holder.binding.itemBtnDelete.setOnClickListener {
+            listener.delete(holder.adapterPosition)
+
+        }
+        holder.binding.itemBtnShare.setOnClickListener {
+            val share = Intent(Intent.ACTION_SEND)
+            share.type = "item_tv_title/*"
+            share.putExtra(Intent.EXTRA_STREAM)
+
+
+        }
+
+
     }
 
-    class NoteViewHolder constructor(val binding: ItemNoteBinding) : ViewHolder(binding.root) {
+    class NoteViewHolder constructor(val binding: ItemNoteBinding) :
+        ViewHolder(binding.root) {
 
-        private var title: TextView? = null
-        private var desc:TextView? = null
-        private var date:TextView? = null
-         var btnEdit: ImageView? = null
         fun onBind(note: Notes) {
-            btnEdit = itemView.findViewById(R.id.item_btn_edit)
-            title = itemView.findViewById(R.id.item_tv_title)
-            desc = itemView.findViewById(R.id.item_tv_des)
-            date = itemView.findViewById(R.id.item_tv_date)
 
 
-            title?.text = note.title
-            desc?.text = note.desc
-            date?.text = note.date
+            binding.itemTvTitle.text = note.title
+            binding.itemTvDes.text = note.desc
+            binding.itemTvDate.text = note.date
 
         }
     }
     interface  Clickable{
         fun edit(position: Int)
+        fun delete(position: Int)
     }
     }
 
 
+private fun Intent.putExtra(extraStream: Any) {
 
+}
