@@ -22,7 +22,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#A1A1A1"
-            android:src="@drawable/gori" />
+            android:src="@drawable/gori"
+            />
     </androidx.cardview.widget.CardView>
 
     <TextView
